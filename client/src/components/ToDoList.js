@@ -65,7 +65,10 @@ class ToDoList extends Component {
         <ToDoForm
           addToDo={this.addToDo}
         />
-        <ul>
+        <ul 
+        className="list"
+        id="toDoList"
+        >
           {todos}
         </ul>
       </div>

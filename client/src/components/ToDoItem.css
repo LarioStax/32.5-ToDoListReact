@@ -1,0 +1,37 @@
+/* List Styles */
+
+.task {
+  padding: 0 1%;
+  width: 98%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 20px;
+  font-weight: 400;
+  color: #454545;
+  transition: all 0.5s ease; 
+}
+
+.task:hover {
+  background: rgba(0, 0, 0, .02);
+  cursor: pointer;
+}
+
+.done {
+  text-decoration: line-through;
+  color: #959595;
+}
+
+li .deleteSpan {
+  color: #aa2222;
+  float: right;
+  opacity: 0;
+  transition: all 0.1s;
+}
+
+li .deleteSpan:hover {
+  color: #ff0000;
+}
+
+.task:hover span {
+  opacity: 1;
+}

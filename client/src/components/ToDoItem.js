@@ -6,17 +6,18 @@ class ToDoItem extends Component {
   render() {
     let { name, completed, onDelete, onToggle } = this.props;
     return (
-      <li>
+      <li className="task">
         <span
-          style={{ textDecoration: completed ? "line-through" : "none" }}
+          className= {completed ? "done" : "" }
           onClick={onToggle}
         >
           {name}
         </span>
         <span
           onClick={onDelete}
+          className="deleteSpan"
         >
-          {" "}X
+          X
         </span>
       </li>
     )
