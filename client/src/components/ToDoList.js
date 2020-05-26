@@ -38,38 +38,64 @@ class ToDoList extends Component {
       headers: new Headers({
         "Content-Type": "application/json"
       }),
-      body: JSON.stringify({name: name})
+      body: JSON.stringify({ name: name })
     })
-    .then(response => {
-      if (response.status >= 200 && response.status <= 299) {
-        return response.json();
-      } else {
-        throw Error(response.statusText);
-      }
-    })
-    .then(newToDo => {
-      this.setState({todos: [...this.state.todos, newToDo]})
-    })
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then(newToDo => {
+        this.setState({ todos: [...this.state.todos, newToDo] })
+      })
   }
 
-  deleteToDo(id){
-    const deleteURL = APIURL + id; 
+  deleteToDo(id) {
+    const deleteURL = APIURL + id;
 
     fetch(deleteURL, {
       method: "DELETE"
     })
-    .then(response => {
-      if (response.status >= 200 && response.status <= 299) {
-        return response.json();
-      } else {
-        throw Error(response.statusText);
-      }
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then(() => {
+        // const todos = this.state.todos.filter(todo => todo._id !== id)
+        // this.setState({todos: todos})
+        this.loadToDos(); //this takes longer, but is 100% in sync with the database
+      })
+  }
+
+  toggleToDo(id, completed) {
+    const updateURL = APIURL + id;
+
+    fetch(updateURL, {
+      method: "PUT",
+      headers: new Headers({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({ completed: !completed })
     })
-    .then(() => {
-      // const todos = this.state.todos.filter(todo => todo._id !== id)
-      // this.setState({todos: todos})
-      this.loadToDos(); //this takes longer, but is 100% in sync with the database
-    })
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          return response.json();
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then((updatedToDo) => {
+        // const todos = this.state.todos.map(todo => (
+        //   todo._id === updatedToDo._id) ? { ...todo, completed: !todo.completed } : todo
+        // );
+        // this.setState({todos: todos})
+        this.loadToDos(); //this takes longer, but is 100% in sync with the database
+      })
   }
 
   render() {
@@ -78,12 +104,13 @@ class ToDoList extends Component {
         key={todo._id}
         {...todo}
         onDelete={this.deleteToDo.bind(this, todo._id)} //we have to bind it here and not in constructor due to id
+        onToggle={this.toggleToDo.bind(this, todo._id, todo.completed)}
       />
     ))
     return (
       <div>
         <h1>ToDo List Component</h1>
-        <ToDoForm 
+        <ToDoForm
           addToDo={this.addToDo}
         />
         <ul>
