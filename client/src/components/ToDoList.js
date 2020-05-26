@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ToDoItem from "./ToDoItem.js";
 import ToDoForm from "./ToDoForm.js";
 
-const APIURL = "/api/todos"
+const APIURL = "/api/todos/"
 
 class ToDoList extends Component {
   constructor(props) {
@@ -52,11 +52,32 @@ class ToDoList extends Component {
     })
   }
 
+  deleteToDo(id){
+    const deleteURL = APIURL + id; 
+
+    fetch(deleteURL, {
+      method: "DELETE"
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status <= 299) {
+        return response.json();
+      } else {
+        throw Error(response.statusText);
+      }
+    })
+    .then(() => {
+      // const todos = this.state.todos.filter(todo => todo._id !== id)
+      // this.setState({todos: todos})
+      this.loadToDos(); //this takes longer, but is 100% in sync with the database
+    })
+  }
+
   render() {
     let todos = this.state.todos.map((todo) => (
       <ToDoItem
         key={todo._id}
         {...todo}
+        onDelete={this.deleteToDo.bind(this, todo._id)} //we have to bind it here and not in constructor due to id
       />
     ))
     return (
