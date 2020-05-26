@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+
 import ToDoItem from "./ToDoItem.js";
 import ToDoForm from "./ToDoForm.js";
 
-const APIURL = "/api/todos/"
+import * as apiCalls from "../helpers/apicalls.js";
 
 class ToDoList extends Component {
   constructor(props) {
@@ -18,84 +19,30 @@ class ToDoList extends Component {
     this.loadToDos();
   }
 
-  loadToDos() {
-    fetch(APIURL)
-      //fetch doesn't throw error with 4xx and 5xx responses
-      .then(response => {
-        if (response.status >= 200 && response.status <= 299) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      })
-      .then(todos => this.setState({ todos }))
-      .catch(error => console.log(error));
+  async loadToDos() {
+    const todos = await apiCalls.getToDos()
+    this.setState({ todos })
   }
 
-  addToDo(name) {
-    fetch(APIURL, {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify({ name: name })
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status <= 299) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      })
-      .then(newToDo => {
-        this.setState({ todos: [...this.state.todos, newToDo] })
-      })
+  async addToDo(name) {
+    const newToDo = await apiCalls.createToDo(name)
+    this.setState({ todos: [...this.state.todos, newToDo] })
   }
 
-  deleteToDo(id) {
-    const deleteURL = APIURL + id;
-
-    fetch(deleteURL, {
-      method: "DELETE"
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status <= 299) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      })
-      .then(() => {
-        // const todos = this.state.todos.filter(todo => todo._id !== id)
-        // this.setState({todos: todos})
-        this.loadToDos(); //this takes longer, but is 100% in sync with the database
-      })
+  async deleteToDo(id) {
+    await apiCalls.deleteToDo(id);
+    // const todos = this.state.todos.filter(todo => todo._id !== id)
+    // this.setState({todos: todos})
+    this.loadToDos(); //this takes longer, but is 100% in sync with the database
   }
 
-  toggleToDo(id, completed) {
-    const updateURL = APIURL + id;
-
-    fetch(updateURL, {
-      method: "PUT",
-      headers: new Headers({
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify({ completed: !completed })
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status <= 299) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      })
-      .then((updatedToDo) => {
-        // const todos = this.state.todos.map(todo => (
-        //   todo._id === updatedToDo._id) ? { ...todo, completed: !todo.completed } : todo
-        // );
-        // this.setState({todos: todos})
-        this.loadToDos(); //this takes longer, but is 100% in sync with the database
-      })
+  async toggleToDo(id, completed) {
+    await apiCalls.updateToDo(id, completed);
+    // const todos = this.state.todos.map(todo => (
+    //   todo._id === updatedToDo._id) ? { ...todo, completed: !todo.completed } : todo
+    // );
+    // this.setState({todos: todos})
+    this.loadToDos(); //this takes longer, but is 100% in sync with the database
   }
 
   render() {
