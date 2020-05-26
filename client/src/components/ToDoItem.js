@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import "./ToDoItem.css"
+
 class ToDoItem extends Component {
   render() {
     let { name, completed, onDelete, onToggle } = this.props;

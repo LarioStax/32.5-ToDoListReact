@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import "./ToDoForm.css"
+
 class ToDoForm extends Component {
   constructor(props) {
     super(props);
@@ -29,11 +31,14 @@ class ToDoForm extends Component {
     return (
       <form 
         onSubmit={this.handleSubmit}
+        className="form"
       >
         <input
           type="text"
           value={this.state.inputValue}
           onChange={this.handleChange}
+          id="toDoInput"
+          placeholder="What should be done?"
         />
         <button
           // onClick={this.handleSubmit}
