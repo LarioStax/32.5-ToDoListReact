@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ToDoItem from "./ToDoItem.js";
+import ToDoForm from "./ToDoForm.js";
 
 const APIURL = "/api/todos"
 
@@ -40,6 +41,7 @@ class ToDoList extends Component {
     return (
       <div>
         <h1>ToDo List Component</h1>
+        <ToDoForm />
         <ul>
           {todos}
         </ul>
