@@ -19,7 +19,7 @@ class ToDoForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.inputValue);
+    this.props.addToDo(this.state.inputValue);
     this.setState({
       inputValue: ""
     })
@@ -27,18 +27,20 @@ class ToDoForm extends Component {
 
   render() {
     return (
-      <div>
+      <form 
+        onSubmit={this.handleSubmit}
+      >
         <input
           type="text"
           value={this.state.inputValue}
           onChange={this.handleChange}
         />
         <button
-          onClick={this.handleSubmit}
+          // onClick={this.handleSubmit}
         >
           Add ToDo
         </button>
-      </div>
+      </form>
     )
   }
 }
