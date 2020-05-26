@@ -5,6 +5,8 @@ import ToDoForm from "./ToDoForm.js";
 
 import * as apiCalls from "../helpers/apicalls.js";
 
+import "./ToDoList.css"
+
 class ToDoList extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +58,10 @@ class ToDoList extends Component {
     ))
     return (
       <div>
-        <h1>ToDo List Component</h1>
+      <header>
+        <h1>To-Do List</h1>
+        <h2>Simple app to declutter your mind!</h2>
+      </header>
         <ToDoForm
           addToDo={this.addToDo}
         />
